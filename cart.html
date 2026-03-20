@@ -38,15 +38,18 @@
         border-bottom: 1px solid #eee;
     }
 
-    /* ADD BUTTON */
-    .add-btn {
-        background: linear-gradient(45deg, #28a745, #5cd65c);
-        color: white;
+    button {
+        margin-left: 5px;
         border: none;
-        padding: 6px 12px;
+        padding: 6px 10px;
         border-radius: 6px;
         cursor: pointer;
         transition: 0.3s;
+        color: white;
+    }
+
+    .add-btn {
+        background: linear-gradient(45deg, #28a745, #5cd65c);
     }
 
     .add-btn:hover {
@@ -54,19 +57,22 @@
         transform: scale(1.05);
     }
 
-    /* REMOVE BUTTON */
     .remove-btn {
         background: linear-gradient(45deg, #dc3545, #ff6b6b);
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 6px;
-        cursor: pointer;
-        transition: 0.3s;
     }
 
     .remove-btn:hover {
         background: linear-gradient(45deg, #c82333, #ff4d4d);
+        transform: scale(1.05);
+    }
+
+    .edit-btn {
+        background: linear-gradient(45deg, #ffc107, #ffdd57);
+        color: black;
+    }
+
+    .edit-btn:hover {
+        background: linear-gradient(45deg, #e0a800, #ffd633);
         transform: scale(1.05);
     }
 
@@ -75,7 +81,6 @@
         margin-top: 20px;
         text-align: right;
         font-size: 18px;
-        color: #333;
     }
 </style>
 </head>
@@ -134,6 +139,24 @@
         renderCart();
     }
 
+    function editCartItem(index) {
+        let options = "Choose new book:\\n";
+        books.forEach(b => {
+            options += `${b.id}. ${b.name} - ₹${b.price}\\n`;
+        });
+
+        let choice = prompt(options);
+
+        const selectedBook = books.find(b => b.id == choice);
+
+        if (selectedBook) {
+            cart[index] = selectedBook;
+            renderCart();
+        } else {
+            alert("Invalid choice!");
+        }
+    }
+
     function renderCart() {
         cartItems.innerHTML = "";
         let total = 0;
@@ -144,7 +167,10 @@
             div.className = "cart-item";
             div.innerHTML = `
                 <span>${item.name} - ₹${item.price}</span>
-                <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                <div>
+                    <button class="edit-btn" onclick="editCartItem(${index})">Edit</button>
+                    <button class="remove-btn" onclick="removeFromCart(${index})">Remove</button>
+                </div>
             `;
             cartItems.appendChild(div);
         });
